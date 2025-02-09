@@ -172,9 +172,9 @@ uint8_t cc_read_rssi(void) {
  * CC1101 initialisation
  */
 static void cc_spi_reset(void) {
-  gpio_reset_pin( CONFIG_CC_CSN_GPIO );
-  gpio_set_direction( CONFIG_CC_CSN_GPIO, GPIO_MODE_OUTPUT );
-  gpio_set_level( CONFIG_CC_CSN_GPIO, 1 );
+  gpio_reset_pin( CC_CSN_GPIO );
+  gpio_set_direction( CC_CSN_GPIO, GPIO_MODE_OUTPUT );
+  gpio_set_level( CC_CSN_GPIO, 1 );
 
   cc_deassert();
   delayMicroseconds(1);
@@ -190,7 +190,7 @@ void cc_init(void) {
   uint8_t param[CC_PARAM_MAX];
   uint8_t i,len;
 
-  esp_log_level_set(TAG, CONFIG_CC_LOG_LEVEL );
+  esp_log_level_set(TAG, CC_LOG_LEVEL );
 
   cc_spi_reset();
   cc_spi_init();

@@ -1,7 +1,7 @@
 set(CMAKE_C_COMPILER "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-gcc.exe")
 set(CMAKE_C_COMPILER_ARG1 "")
 set(CMAKE_C_COMPILER_ID "GNU")
-set(CMAKE_C_COMPILER_VERSION "13.2.0")
+set(CMAKE_C_COMPILER_VERSION "14.2.0")
 set(CMAKE_C_COMPILER_VERSION_INTERNAL "")
 set(CMAKE_C_COMPILER_WRAPPER "")
 set(CMAKE_C_STANDARD_COMPUTED_DEFAULT "11")
@@ -70,7 +70,7 @@ endif()
 
 
 
-set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/include-fixed;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/sys-include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include")
+set(CMAKE_C_IMPLICIT_INCLUDE_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/include-fixed;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include")
 set(CMAKE_C_IMPLICIT_LINK_LIBRARIES "gcc;c;nosys;c;gcc;gcc;c;nosys")
-set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib")
+set(CMAKE_C_IMPLICIT_LINK_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib")
 set(CMAKE_C_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")

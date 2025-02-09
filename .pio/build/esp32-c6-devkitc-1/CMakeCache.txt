@@ -227,7 +227,7 @@ CMAKE_TOOLCHAIN_FILE:FILEPATH=C:/Users/marce/.platformio/packages/framework-espi
 CMAKE_VERBOSE_MAKEFILE:BOOL=FALSE
 
 //No help, variable specified on the command line.
-EXTRA_COMPONENT_DIRS:PATH=d:/github/ramses_esp_c6/src
+EXTRA_COMPONENT_DIRS:PATH=D:/github/ramses_esp_c6/src
 
 //Git command line client
 GIT_EXECUTABLE:FILEPATH=C:/Program Files/Git/cmd/git.exe
@@ -239,13 +239,13 @@ IDF_TARGET:STRING=esp32c6
 IDF_TOOLCHAIN:STRING=gcc
 
 //No help, variable specified on the command line.
-PYTHON:UNINITIALIZED=C:\Users\marce\.platformio\penv\.espidf-5.2.1\Scripts\python.exe
+PYTHON:UNINITIALIZED=C:\Users\marce\.platformio\penv\.espidf-5.4.0\Scripts\python.exe
 
 //No help, variable specified on the command line.
 PYTHON_DEPS_CHECKED:UNINITIALIZED=1
 
 //No help, variable specified on the command line.
-SDKCONFIG:UNINITIALIZED=d:\github\ramses_esp_c6\sdkconfig.esp32-c6-devkitc-1
+SDKCONFIG:UNINITIALIZED=D:\github\ramses_esp_c6\sdkconfig.esp32-c6-devkitc-1
 
 //Value Computed by CMake
 ramses_esp_c6_BINARY_DIR:STATIC=D:/github/ramses_esp_c6/.pio/build/esp32-c6-devkitc-1

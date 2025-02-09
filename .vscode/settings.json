@@ -2,5 +2,9 @@
     "files.exclude": {
         "": true,
         "**/.git": false
+    },
+    "files.associations": {
+        "arduino.h": "c",
+        "time.h": "c"
     }
 }

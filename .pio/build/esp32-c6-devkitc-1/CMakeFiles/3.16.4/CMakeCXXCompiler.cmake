@@ -1,7 +1,7 @@
 set(CMAKE_CXX_COMPILER "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/bin/riscv32-esp-elf-g++.exe")
 set(CMAKE_CXX_COMPILER_ARG1 "")
 set(CMAKE_CXX_COMPILER_ID "GNU")
-set(CMAKE_CXX_COMPILER_VERSION "13.2.0")
+set(CMAKE_CXX_COMPILER_VERSION "14.2.0")
 set(CMAKE_CXX_COMPILER_VERSION_INTERNAL "")
 set(CMAKE_CXX_COMPILER_WRAPPER "")
 set(CMAKE_CXX_STANDARD_COMPUTED_DEFAULT "17")
@@ -82,7 +82,7 @@ endif()
 
 
 
-set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/13.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/13.2.0/riscv32-esp-elf/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/13.2.0/backward;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/include-fixed;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/sys-include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include")
+set(CMAKE_CXX_IMPLICIT_INCLUDE_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/14.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/14.2.0/riscv32-esp-elf/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include/c++/14.2.0/backward;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/include;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/include-fixed;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/include")
 set(CMAKE_CXX_IMPLICIT_LINK_LIBRARIES "stdc++;m;gcc;c;nosys;c;gcc;gcc;c;nosys")
-set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/13.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib")
+set(CMAKE_CXX_IMPLICIT_LINK_DIRECTORIES "C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib/rv32imac_zicsr_zifencei/ilp32;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc/riscv32-esp-elf/14.2.0;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/lib/gcc;C:/Users/marce/.platformio/packages/toolchain-riscv32-esp/riscv32-esp-elf/lib")
 set(CMAKE_CXX_IMPLICIT_LINK_FRAMEWORK_DIRECTORIES "")
