@@ -11,7 +11,7 @@
  * Interpret TX messages provided by Host
  *
  */
-#include <Arduino.h>
+//#include <Arduino.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/time.h>

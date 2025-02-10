@@ -16,7 +16,7 @@
 #include "esp_app_desc.h"
 #include "esp_intr_alloc.h"
 #include "esp_system.h"
-#include <Arduino.h>
+// #include <Arduino.h>
 #include <stdio.h>
 
 #include "esp_event.h"
@@ -33,7 +33,7 @@
 #include "platform.h"
 #include "radio.h"
 
-app_main()
+void app_main(void)
 {
     const esp_app_desc_t* app = esp_app_get_description();
     printf("# %s %s\n", app->project_name, app->version);

@@ -13,7 +13,7 @@
  */
 static const char* TAG = "HOST";
 #include "esp_log.h"
-#include <Arduino.h>
+//#include <Arduino.h>
 
 #include <stdio.h>
 

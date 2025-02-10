@@ -11,7 +11,7 @@
 // static const char *TAG = "DEBUG";
 #include "cmd.h"
 #include "esp_log.h"
-#include <Arduino.h>
+// #include <Arduino.h>
 
 /*********************************************************
  * Log level control

@@ -10,7 +10,7 @@
 static const char* TAG = "NVS";
 #include "esp_err.h"
 #include "esp_log.h"
-#include <Arduino.h>
+//#include <Arduino.h>
 
 #include "nvs_flash.h"
 
