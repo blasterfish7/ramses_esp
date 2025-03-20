@@ -13,7 +13,6 @@
  */
 static const char* TAG = "HOST";
 #include "esp_log.h"
-//#include <Arduino.h>
 
 #include <stdio.h>
 
@@ -39,7 +38,7 @@ struct host_data {
 /*************************************************************************
  * Use FUNC button to trigger system restart
  */
-#define RESTART_INTERVAL (RESTART_DELAY * 1000 / portTICK_PERIOD_MS)
+#define RESTART_INTERVAL (CONFIG_RESTART_DELAY * 1000 / portTICK_PERIOD_MS)
 
 static struct restart {
     StaticTimer_t timer;
@@ -107,7 +106,7 @@ static void Host_Task(void* param)
 
     if (ctxt->platforms & PLATFORM_GW)
         gateway_init(ctxt->coreID);
-
+    ESP_LOGI(TAG, "going to cmd work");
     cmd_work(cmd_data);
 }
 

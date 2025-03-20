@@ -15,7 +15,7 @@
 static const struct gpio_map {
     uint32_t gpio;
 } map[PIN_MAX] = {
-    { CS_PLATFORM_PIN },
+    { CONFIG_CS_PLATFORM_PIN },
 };
 
 static uint8_t const platforms[] = {

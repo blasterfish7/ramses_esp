@@ -1,0 +1,45 @@
+{
+	"folders": [
+        {
+            "path": "."
+        },
+        {
+            "name": "TestESPIDF",
+            "path": "../../OneDrive/Documents/PlatformIO/Projects/TestESPIDF"
+        },
+        {
+            "name": "TestESPIDF2",
+            "path": "../../OneDrive/Documents/PlatformIO/Projects/TestESPIDF2"
+        },
+        {
+            "name": "ESPIDFTEST3",
+            "path": "../../OneDrive/Documents/PlatformIO/Projects/ESPIDFTEST3"
+        }
+    ],
+    "settings": {
+        "files.associations": {
+            "arduino.h": "c",
+            "time.h": "c",
+            "ramses_buttons.h": "c",
+            "soc_caps.h": "c",
+            "platform.h": "c",
+            "esp_log.h": "c",
+            "platform_esp32_idf.h": "c",
+            "cc1101_param.h": "c",
+            "radio.h": "c",
+            "esp_app_desc.h": "c",
+            "stdio.h": "c",
+            "task.h": "c",
+            "esp_vfs_usb_serial_jtag.h": "c",
+            "freertos.h": "c",
+            "ramses_sntp.h": "c",
+            "ramses_ota.h": "c",
+            "esp_err.h": "c",
+            "esp_netif.h": "c",
+            "mqtt_client.h": "c",
+            "ramses_led.h": "c",
+            "esp_task_wdt.h": "c",
+            "cstdint": "c"
+        }
+    }
+}

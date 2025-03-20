@@ -1,0 +1,67 @@
+menu "Frame Configuration"
+
+    config FRM_LOG_LEVEL
+        int "Frame LOG LEVEL"
+        range 0	5
+        default 2
+        help
+        	Set LOG Level for FRAME module
+        	0=None
+        	1=Error
+        	2=Warn
+        	3=Info
+        	4=Debug
+        	5=Verbose
+
+    config FRM_MIN_TX_DELAY
+        int "Minimum delay before TX (mS)"
+        range 0 100
+        default	50
+        help
+            Specifies the minimum delay after any RX or TX frame before next TX
+
+    config FRM_MAX_CAL_INTERVAL
+        int "Maximum interval between cc1101 calibrations (sec)"
+        range 0 300
+        default	30
+        help
+            Specifies the maximum interval between cc1101 calibrations
+
+    config UART_LOG_LEVEL
+        int "UART LOG LEVEL"
+        range 0	5
+        default 2
+        help
+        	Set LOG Level for UART module
+        	0=None
+        	1=Error
+        	2=Warn
+        	3=Info
+        	4=Debug
+        	5=Verbose
+
+    choice UART_NUM
+        prompt "UART number selection"
+        default UART_NUM_1 if IDF_TARGET_ESP32S3
+        default UART_NUM_1 if IDF_TARGET_ESP32C6
+        help
+            Select the UART number for your board
+        config UART_NUM_0
+            bool "UART NUM 0"
+        config UART_NUM_1
+            bool "UART NUM 1"
+    endchoice
+
+    choice BAUD_RATE
+        prompt "Baud rate selection"
+        default RATE_38400 if IDF_TARGET_ESP32S3
+        default RATE_38400 if IDF_TARGET_ESP32C6
+        help
+            Select the UART number for your board
+        config RATE_38400
+            bool "RATE 38400"
+        config RATE_115200
+            bool "RATE 115200"
+    endchoice
+
+endmenu
