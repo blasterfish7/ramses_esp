@@ -38,7 +38,7 @@
 
 void app_main(void)
 {
-    //vTaskDelay(10000 / portTICK_PERIOD_MS);
+    vTaskDelay(5 / portTICK_PERIOD_MS);
 
     const esp_app_desc_t* app = esp_app_get_description();
     printf("# %s %s\n", app->project_name, app->version);

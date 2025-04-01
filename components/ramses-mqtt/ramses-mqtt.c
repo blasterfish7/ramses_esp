@@ -171,14 +171,14 @@ static void publish_firmware(struct mqtt_data* ctxt, char* topic)
 {
     const esp_app_desc_t* app = esp_app_get_description();
     strcat(topic, "/firmware");
-    esp_mqtt_client_publish(ctxt->client, topic, app->project_name, 0, 1, 1);
+    int msg_id = esp_mqtt_client_enqueue(ctxt->client, topic, app->project_name, 0, 1, 1, false);
 }
 
 static void publish_version(struct mqtt_data* ctxt, char* topic)
 {
     const esp_app_desc_t* app = esp_app_get_description();
     strcat(topic, "/version");
-    esp_mqtt_client_publish(ctxt->client, topic, app->version, 0, 1, 1);
+    int msg_id = esp_mqtt_client_enqueue(ctxt->client, topic, app->version, 0, 1, 1, false);
 }
 
 static void mqtt_publish_info(struct mqtt_data* ctxt)
@@ -213,7 +213,7 @@ static void mqtt_publish_rx(struct mqtt_data* ctxt, char const* ts, char const* 
 
     rx = cJSON_Print(json);
     sprintf(topic, "%s/rx", ctxt->topic);
-    esp_mqtt_client_publish(ctxt->client, topic, rx, 0, 1, 0);
+    int msg_id = esp_mqtt_client_enqueue(ctxt->client, topic, rx, 0, 1, 0, false);
 
     cJSON_Delete(json);
 }
@@ -258,7 +258,7 @@ static void mqtt_publish_cmd(struct mqtt_data* ctxt)
 {
     char topic[64];
     sprintf(topic, "%s/cmd/cmd", ctxt->topic);
-    esp_mqtt_client_publish(ctxt->client, topic, NULL, 0, 0, 0);
+    int msg_id = esp_mqtt_client_enqueue(ctxt->client, topic, NULL, 0, 0, 0, false);
 }
 
 static void mqtt_subscribe_cmd(struct mqtt_data* ctxt)
@@ -274,9 +274,7 @@ static void mqtt_publish_cmd_result(struct mqtt_data* ctxt, char const* cmd, esp
 
     sprintf(topic, "%s/cmd/result", ctxt->topic);
     sprintf(data, "{ \"cmd\":\"%s\", \"err\":\"%s\", \"return\":%d} ", cmd, esp_err_to_name(err), retVal);
-    esp_mqtt_client_publish(ctxt->client, topic, data, 0, 0, 0);
-
-    //  mqtt_publish_cmd( ctxt ); // Clear CMD so we don't execute ita again
+    int msg_id = esp_mqtt_client_enqueue(ctxt->client, topic, data, 0, 0, 0, false);
 }
 
 static void mqtt_process_cmd(struct mqtt_data* ctxt, char const* data, int dataLen)
@@ -436,7 +434,7 @@ static void mqtt_state_machine(struct mqtt_data* ctxt)
 
     case MQTT_CONNECTED:
         printf("# MQTT: Connected\n");
-        esp_mqtt_client_publish(ctxt->client, ctxt->topic, "online", 0, 1, 1);
+        esp_mqtt_client_enqueue(ctxt->client, ctxt->topic, "online", 0, 1, 1, true);
         mqtt_subscribe_tx(ctxt);
         mqtt_publish_cmd(ctxt); // Clear old CMD
         mqtt_subscribe_cmd(ctxt);

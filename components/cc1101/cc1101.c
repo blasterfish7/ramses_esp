@@ -35,7 +35,7 @@ static spi_bus_config_t const cc_buscfg = {
 };
 
 static spi_device_interface_config_t const cc_devcfg = {
-    .clock_speed_hz = 1000000, // SPI clock is 1 MHz!
+    .clock_speed_hz = 10000000, // SPI clock is 1 MHz!
     .queue_size = 7,
     .mode = 0, // SPI mode 0
     .spics_io_num = CONFIG_CC_CSN_GPIO,
@@ -158,7 +158,7 @@ void cc_enter_tx_mode(void)
     while (CC_STATE(cc_strobe(CC_SIDLE)) != CC_STATE_IDLE) { }
 
     cc_write(CC_PKTCTRL0, 0x02); // Fifo mode, infinite packet
-    cc_write(CC_IOCFG0, 0x02); // Falling edge, TX Fifo low
+    cc_write(CC_IOCFG0, 0x03); // Falling edge, TX Fifo low
 
     cc_strobe(CC_SFTX);
     while (CC_STATE(cc_strobe(CC_STX)) != CC_STATE_TX) { }
@@ -214,7 +214,7 @@ void cc_init(void)
     for (i = 0; i < len; i++)
         cc_write(i, param[i]);
 
-    cc_write(CC_FIFOTHR, (param[CC_FIFOTHR] & 0xF0) + 14); // TX Fifo Threshold 5
+    cc_write(CC_FIFOTHR, (param[CC_FIFOTHR] & 0xF0) + 11); // TX Fifo Threshold 5
 
     len = cc_pa_get(param);
     for (i = 0; i < len; i++)

@@ -1,5 +1,11 @@
 menu "Frame Configuration"
 
+    config USE_TASK_NOTIFICATIONS
+        int "set use task notifications"
+        range 0	1
+        default 1
+
+
     config FRM_LOG_LEVEL
         int "Frame LOG LEVEL"
         range 0	5

@@ -4,16 +4,7 @@
             "path": "."
         },
         {
-            "name": "TestESPIDF",
-            "path": "../../OneDrive/Documents/PlatformIO/Projects/TestESPIDF"
-        },
-        {
-            "name": "TestESPIDF2",
-            "path": "../../OneDrive/Documents/PlatformIO/Projects/TestESPIDF2"
-        },
-        {
-            "name": "ESPIDFTEST3",
-            "path": "../../OneDrive/Documents/PlatformIO/Projects/ESPIDFTEST3"
+            "path": "../ramses_esp_c6_2"
         }
     ],
     "settings": {
@@ -39,7 +30,8 @@
             "mqtt_client.h": "c",
             "ramses_led.h": "c",
             "esp_task_wdt.h": "c",
-            "cstdint": "c"
+            "cstdint": "c",
+            "cc1101.h": "c"
         }
     }
 }

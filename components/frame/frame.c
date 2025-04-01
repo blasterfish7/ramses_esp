@@ -22,10 +22,10 @@
 #include <driver/uart.h>
 
 static const char* TAG = "FRM";
+#include "cc1101.h"
 #include "esp_err.h"
 #include "esp_log.h"
-
-#include "cc1101.h"
+#include "esp_timer.h"
 #include "frame.h"
 #include "message.h"
 #include "ramses_led.h"
@@ -393,6 +393,7 @@ static void tx_flush(void)
 // TX FIFO
 
 static QueueHandle_t tx_isr_queue;
+static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
 
 static enum tx_fifo_state {
     TX_FIFO_FILL,
@@ -420,6 +421,7 @@ static uint8_t tx_fifo_send_block(void)
     uint8_t block = 4;
 
     do {
+        // ESP_LOGI(TAG, "bl: %d", block);
         uint8_t data;
         done = frame_tx_byte(&data);
         count = tx_byte(data);
@@ -428,6 +430,9 @@ static uint8_t tx_fifo_send_block(void)
 
     return done;
 }
+
+// declare function prototype for frame_tx_done, such that it can be used already in tx_fifo_prime:
+static void frame_tx_done(void);
 
 static void tx_fifo_prime(void)
 {
@@ -441,18 +446,48 @@ static void tx_fifo_prime(void)
 
     // So we can see an interrupt when it falls below threshold
     // send sufficient data to fill FIFO above threshold
+
     txBits = 0;
-    while (!gpio_get_level(CONFIG_CC_GDO0_GPIO))
-        tx_fifo_send_block();
+    uint8_t done = 0;
+    uint8_t count = 0;
+    uint8_t data;
+    uint64_t now = esp_timer_get_time();
+    uint64_t time_out = 200 * 1000; // 200ms
+    // This task should really not be interrupted by anything else, or it may miss the FIFO empty interrupt.
+
+    while (!done && (esp_timer_get_time() - now) < time_out) {
+        // ESP_LOGI(TAG, "nd");
+        if (!gpio_get_level(CONFIG_CC_GDO0_GPIO)) {
+            done = tx_fifo_send_block();
+        }
+    }
+    tx_flush();
+    cc_fifo_end();
+    if (done) {
+        while (!gpio_get_level(CONFIG_CC_GDO0_GPIO)) {
+        }
+        tx_fifo_wait();
+    } else {
+        // Failed sending... just pretend it is done and start receiving again.
+        ESP_LOGI(TAG, "TX FIFO: Timed out...");
+        frame_tx_done();
+        led_off(LED_TX);
+        frame.state = FRM_IDLE;
+    }
 }
 
 static void tx_fifo_fill(void)
 {
-    uint8_t done = tx_fifo_send_block();
+    uint8_t done = 0;
+
+    while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && !done)
+        done = tx_fifo_send_block();
 
     if (done) {
+        ESP_LOGI(TAG, "TX FIFO: Done");
         tx_flush();
         cc_fifo_end();
+
         tx_state = TX_FIFO_WAIT;
 
         // Switch to rising edge to detect FIFO empty
@@ -464,8 +499,27 @@ static void tx_fifo_fill(void)
 
 static void IRAM_ATTR GDO0_ISR(void* args)
 {
-    gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
-    xQueueSendFromISR(tx_isr_queue, NULL, NULL);
+    // ESP_LOGI(TAG, "ISR1");
+    // taskENTER_CRITICAL_ISR(&my_spinlock);
+    // ESP_LOGI(TAG, "ISR2");
+    // DEBUG_FRAME(0);
+    // led_off(LED_TX);
+    // switch (tx_state) {
+    // case TX_FIFO_FILL:
+    //     tx_fifo_fill();
+    //     break;
+    // case TX_FIFO_WAIT:
+    //     tx_fifo_wait();
+    //     break;
+    // }
+    // gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
+    // DEBUG_FRAME(1);
+    // led_on(LED_TX);
+    // // Critical section
+    // taskEXIT_CRITICAL_ISR(&my_spinlock);
+    // gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
+    // ESP_EARLY_LOGI(TAG, "ISR");
+    // xQueueSendFromISR(tx_isr_queue, NULL, NULL);
 }
 
 static void tx_fifo_init(void)
@@ -482,31 +536,33 @@ static void tx_fifo_init(void)
 static void tx_fifo_start(void)
 {
     // Falling edge for FIFO low
-    gpio_set_intr_type(CONFIG_CC_GDO0_GPIO, GPIO_INTR_NEGEDGE);
+    // gpio_set_intr_type(CONFIG_CC_GDO0_GPIO, GPIO_INTR_NEGEDGE);
 
-    tx_fifo_prime();
     tx_state = TX_FIFO_FILL;
-
-    gpio_isr_handler_add(CONFIG_CC_GDO0_GPIO, GDO0_ISR, NULL);
+    tx_fifo_prime();
+    // gpio_isr_handler_add(CONFIG_CC_GDO0_GPIO, GDO0_ISR, NULL);
 }
 
 static void tx_fifo_work(void)
 {
-    if (xQueueReceive(tx_isr_queue, NULL, 0)) {
-        DEBUG_FRAME(0);
-        led_off(LED_TX);
-        switch (tx_state) {
-        case TX_FIFO_FILL:
-            tx_fifo_fill();
-            break;
-        case TX_FIFO_WAIT:
-            tx_fifo_wait();
-            break;
-        }
-        gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
-        DEBUG_FRAME(1);
-        led_on(LED_TX);
+    // ESP_LOGI(TAG, "TX FIFO: Work");
+    //  if (xQueueReceive(tx_isr_queue, NULL, 0)) {
+    DEBUG_FRAME(0);
+    led_off(LED_TX);
+    switch (tx_state) {
+    case TX_FIFO_FILL:
+        tx_fifo_fill();
+        ESP_LOGI(TAG, "TX FIFO: Filled");
+        break;
+    case TX_FIFO_WAIT:
+        ESP_LOGI(TAG, "TX FIFO: Wait");
+        tx_fifo_wait();
+        break;
     }
+    gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
+    DEBUG_FRAME(1);
+    led_on(LED_TX);
+    //}
 }
 
 /***********************************************************************************
@@ -582,7 +638,6 @@ void frame_tx_start(uint8_t* raw, uint8_t nRaw)
 uint8_t frame_tx_byte(uint8_t* byte)
 {
     uint8_t done = 0;
-
     switch (txFrm.state) {
     case FRM_TX_IDLE:
         txFrm.state = FRM_TX_PREFIX;
@@ -752,7 +807,6 @@ void frame_work(void)
             break;
         }
 
-        tx_fifo_work();
         break;
     }
 }
