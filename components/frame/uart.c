@@ -40,9 +40,11 @@ static const char* TAG = "UART";
     } while (0)
 
 #if CONFIG_UART_NUM_0
-static uart_port_t const uart_num = UART_NUM_0;
+static uart_port_t const uart_num
+    = UART_NUM_0;
 #elif CONFIG_UART_NUM_1
-static uart_port_t const uart_num = UART_NUM_1;
+static uart_port_t const uart_num
+    = UART_NUM_1;
 #endif
 static QueueHandle_t uartQ;
 
@@ -55,6 +57,7 @@ enum uart_mode {
     uart_off,
     uart_rx,
     uart_tx
+
 };
 
 static enum uart_mode uartMode = uart_off;
@@ -64,9 +67,7 @@ static bool uart_rx_on = false;
  * UART off
  */
 
-static void uart_work_off(void)
-{
-}
+static void uart_work_off(void) { }
 
 /*******************************************************
  * UART RX

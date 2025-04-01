@@ -1,11 +1,5 @@
 menu "Frame Configuration"
 
-    config USE_TASK_NOTIFICATIONS
-        int "set use task notifications"
-        range 0	1
-        default 1
-
-
     config FRM_LOG_LEVEL
         int "Frame LOG LEVEL"
         range 0	5
@@ -66,8 +60,6 @@ menu "Frame Configuration"
             Select the UART number for your board
         config RATE_38400
             bool "RATE 38400"
-        config RATE_115200
-            bool "RATE 115200"
     endchoice
 
 endmenu

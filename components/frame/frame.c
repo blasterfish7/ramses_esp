@@ -444,19 +444,17 @@ static void tx_fifo_prime(void)
     cc_write_fifo(0x00);
     cc_write_fifo(0x00);
 
-    // So we can see an interrupt when it falls below threshold
-    // send sufficient data to fill FIFO above threshold
+    // Manage Fifo filling here. Fill until full or done, refill if below threshold.
 
     txBits = 0;
     uint8_t done = 0;
     uint8_t count = 0;
     uint8_t data;
+    // if level change is missed or otherwise while-loop fails, timeout.
     uint64_t now = esp_timer_get_time();
     uint64_t time_out = 200 * 1000; // 200ms
-    // This task should really not be interrupted by anything else, or it may miss the FIFO empty interrupt.
 
     while (!done && (esp_timer_get_time() - now) < time_out) {
-        // ESP_LOGI(TAG, "nd");
         if (!gpio_get_level(CONFIG_CC_GDO0_GPIO)) {
             done = tx_fifo_send_block();
         }
@@ -468,7 +466,7 @@ static void tx_fifo_prime(void)
         }
         tx_fifo_wait();
     } else {
-        // Failed sending... just pretend it is done and start receiving again.
+        // Failed sending... Reset everything
         ESP_LOGI(TAG, "TX FIFO: Timed out...");
         frame_tx_done();
         led_off(LED_TX);
@@ -484,7 +482,6 @@ static void tx_fifo_fill(void)
         done = tx_fifo_send_block();
 
     if (done) {
-        ESP_LOGI(TAG, "TX FIFO: Done");
         tx_flush();
         cc_fifo_end();
 
@@ -499,27 +496,8 @@ static void tx_fifo_fill(void)
 
 static void IRAM_ATTR GDO0_ISR(void* args)
 {
-    // ESP_LOGI(TAG, "ISR1");
-    // taskENTER_CRITICAL_ISR(&my_spinlock);
-    // ESP_LOGI(TAG, "ISR2");
-    // DEBUG_FRAME(0);
-    // led_off(LED_TX);
-    // switch (tx_state) {
-    // case TX_FIFO_FILL:
-    //     tx_fifo_fill();
-    //     break;
-    // case TX_FIFO_WAIT:
-    //     tx_fifo_wait();
-    //     break;
-    // }
-    // gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
-    // DEBUG_FRAME(1);
-    // led_on(LED_TX);
-    // // Critical section
-    // taskEXIT_CRITICAL_ISR(&my_spinlock);
-    // gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
-    // ESP_EARLY_LOGI(TAG, "ISR");
-    // xQueueSendFromISR(tx_isr_queue, NULL, NULL);
+    gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
+    xQueueSendFromISR(tx_isr_queue, NULL, NULL);
 }
 
 static void tx_fifo_init(void)
@@ -545,24 +523,21 @@ static void tx_fifo_start(void)
 
 static void tx_fifo_work(void)
 {
-    // ESP_LOGI(TAG, "TX FIFO: Work");
-    //  if (xQueueReceive(tx_isr_queue, NULL, 0)) {
-    DEBUG_FRAME(0);
-    led_off(LED_TX);
-    switch (tx_state) {
-    case TX_FIFO_FILL:
-        tx_fifo_fill();
-        ESP_LOGI(TAG, "TX FIFO: Filled");
-        break;
-    case TX_FIFO_WAIT:
-        ESP_LOGI(TAG, "TX FIFO: Wait");
-        tx_fifo_wait();
-        break;
+    if (xQueueReceive(tx_isr_queue, NULL, 0)) {
+        DEBUG_FRAME(0);
+        led_off(LED_TX);
+        switch (tx_state) {
+        case TX_FIFO_FILL:
+            tx_fifo_fill();
+            break;
+        case TX_FIFO_WAIT:
+            tx_fifo_wait();
+            break;
+        }
+        gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
+        DEBUG_FRAME(1);
+        led_on(LED_TX);
     }
-    gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
-    DEBUG_FRAME(1);
-    led_on(LED_TX);
-    //}
 }
 
 /***********************************************************************************
@@ -806,7 +781,6 @@ void frame_work(void)
             frame_rx_enable();
             break;
         }
-
         break;
     }
 }

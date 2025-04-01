@@ -3,4 +3,4 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 
 project(ramses_esp_c6)
 list(APPEND kconfigs "${CMAKE_SOURCE_DIR}/lib/cc1101/Kconfig.projbuild")
-# list(APPEND EXTRA_COMPONENT_DIRS ${CMAKE_SOURCE_DIR}/lib)
+

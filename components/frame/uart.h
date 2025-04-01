@@ -19,8 +19,6 @@ extern void uart_work(void);
 
 #if CONFIG_RATE_38400
 #define RADIO_BAUDRATE 38400
-#elif CONFIG_RATE_115200
-#define RADIO_BAUDRATE 115200
 #endif
 
 #endif // _UART_H_

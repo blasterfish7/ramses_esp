@@ -5,7 +5,3 @@ idf_component_register(
     INCLUDE_DIRS "include"
     PRIV_REQUIRES driver
 )
-
-# if(EXISTS "${COMPONENT_DIR}/Kconfig.projbuild")
-#     set(COMPONENT_KCONFIGS ${COMPONENT_DIR}/Kconfig)
-# endif()

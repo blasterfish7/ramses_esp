@@ -346,26 +346,6 @@ static void mqtt_event_handler(void* handler_args, esp_event_base_t base, int32_
         ESP_LOGI(TAG, "MQTT_EVENT_DISCONNECTED");
         printf("# MQTT: Disonnected\n");
         esp_restart();
-        // Calculate backoff delay and attempt reconnection
-        // uint8_t reconnect_attempts = 0;
-
-        // while (reconnect_attempts < 10) {
-        //     ESP_LOGI(TAG, "Attempting to reconnect (attempt %d of 10)", reconnect_attempts + 1);
-
-        //     if (esp_mqtt_client_reconnect(event->client) == ESP_OK) {
-        //         ESP_LOGI(TAG, "Reconnection successful");
-        //         break; // Exit the loop if reconnection succeeds
-        //     }
-
-        //     reconnect_attempts++;
-        //     ESP_LOGI(TAG, "Reconnection failed, retrying in 1 second");
-        //     vTaskDelay(1000 / portTICK_PERIOD_MS); // Delay for 1 second
-        // }
-
-        // if (reconnect_attempts >= 10) {
-        //     ESP_LOGE(TAG, "Maximum reconnection attempts reached. Restarting...");
-        //     esp_restart();
-        // }
 
         break;
 

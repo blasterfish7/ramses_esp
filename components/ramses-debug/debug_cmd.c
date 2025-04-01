@@ -16,7 +16,8 @@
 /*********************************************************
  * Log level control
  */
-static esp_log_level_t get_log_level(char const* level)
+static esp_log_level_t
+get_log_level(char const* level)
 {
     static char const* name[] = {
         [ESP_LOG_NONE] = "none",

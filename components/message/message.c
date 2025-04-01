@@ -11,6 +11,7 @@
  * Interpret TX messages provided by Host
  *
  */
+
 // #include <Arduino.h>
 #include <stdio.h>
 #include <string.h>
@@ -33,6 +34,7 @@ static const char* TAG = "MSG";
 
 #define _MSG_TYPE(_e, _t) _t,
 static char const* const MsgType[MSG_TYPE_MAX] = { _MSG_TYPE_LIST };
+
 #undef _MSG_TYPE
 
 /********************************************************
