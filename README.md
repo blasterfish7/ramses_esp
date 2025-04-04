@@ -12,5 +12,6 @@ Improvements that I made:
   - Most notably, several changes were made to cc1101 and frame.
     - cc1101 now uses CC_IOCFG0 = 0x03. This makes the GDO0 only goes high once the buffer is full, and low at CC_FIFOTHR, which is now set at 17. As a result, the ESP32 will have much more time between the interrupts given by the CC1101. 
     - Also, the ESP32 will now wait until the entire message is sent, and there is a time-out in case the sending process takes too long. This ensures the CC1101 will never go to idle mode, and if this somehow still happens, the ESP32 can recover from this situation.
+    - Changed CC_PKTLEN to 0x3D. The CC1101 suffers from a known bug that if in RX mode the FIFO is full, the chip hangs. I am not sure if the code ever suffered from this, but I changed it regardlessly.
   - It should now be possible to upload the software to both single and multi-core ESPs. (But I only tested this on the ESP32-C6, feel free to try this with other processors)
 
