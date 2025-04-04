@@ -3,4 +3,5 @@
 .vscode/
 *.code-workspace
 sdkconfig.esp32-c6-devkitm-1
+sdkconfig.esp32-c6-devkitm-1.old
 
