@@ -1,10 +1,4 @@
 menu "LED Configuration"
-
-	config GPIO_RANGE_MAX
-		int
-		default 48 if IDF_TARGET_ESP32S3
-        default 23 if IDF_TARGET_ESP32C6
-    
     config GPIO_RX_LED
 		int "RX LED GPIO"
         range 0 GPIO_RANGE_MAX

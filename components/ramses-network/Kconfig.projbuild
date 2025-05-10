@@ -93,13 +93,13 @@ menu "Network Configuration"
 
   config OTA_URL_SERVER
     string "Server base URL for update"
-        default "https://github.com/IndaloTech/ramses_esp/releases"
+        default "https://github.com/IMMRMKW/ramses_esp/releases"
         help
             URL of server directory which hosts the firmware images.
             
   config OTA_FILENAME
     string "Image filename"
-        default "ramses_esp.bin"
+        default "ramses_esp_c6.bin"
         help
             Filename of image
 
