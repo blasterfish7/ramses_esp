@@ -1,5 +1,6 @@
 menu "Frame Configuration"
 
+
     config FRM_LOG_LEVEL
         int "Frame LOG LEVEL"
         range 0	5

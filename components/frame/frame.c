@@ -28,10 +28,9 @@ static const char* TAG = "FRM";
 #include "esp_timer.h"
 #include "frame.h"
 #include "message.h"
+#include "ramses_debug.h"
 #include "ramses_led.h"
 #include "uart.h"
-
-#include "ramses_debug.h"
 #define DEBUG_FRAME(_i) // do{if(_i)DEBUG1_ON;else DEBUG1_OFF;}while(0)
 
 static uint64_t frm_time(void)
@@ -393,7 +392,6 @@ static void tx_flush(void)
 // TX FIFO
 
 static QueueHandle_t tx_isr_queue;
-static portMUX_TYPE my_spinlock = portMUX_INITIALIZER_UNLOCKED;
 
 static enum tx_fifo_state {
     TX_FIFO_FILL,
@@ -409,7 +407,7 @@ static void tx_fifo_stop(void)
 static void tx_fifo_wait(void)
 {
     uint8_t data;
-    tx_fifo_stop();
+    // tx_fifo_stop(); not needed anymore, we wait for the GDO0 interrupt
     frame_tx_byte(&data);
 }
 
@@ -455,14 +453,19 @@ static void tx_fifo_prime(void)
     uint64_t time_out = 200 * 1000; // 200ms
 
     while (!done && (esp_timer_get_time() - now) < time_out) {
+        // Wait for CC1101 to signal FIFO low
         if (!gpio_get_level(CONFIG_CC_GDO0_GPIO)) {
+            // Send blocks of data until FIFO is full, which is indicated by the GDO0 pin going high
             done = tx_fifo_send_block();
         }
     }
     tx_flush();
     cc_fifo_end();
     if (done) {
-        while (!gpio_get_level(CONFIG_CC_GDO0_GPIO)) {
+        uint64_t now = esp_timer_get_time();
+        // Wait for CC1101 to signal FIFO low
+
+        while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && (esp_timer_get_time() - now) < time_out) {
         }
         tx_fifo_wait();
     } else {
@@ -472,6 +475,7 @@ static void tx_fifo_prime(void)
         led_off(LED_TX);
         frame.state = FRM_IDLE;
     }
+    // Re-enable interrupts (exit critical section)
 }
 
 static void tx_fifo_fill(void)
