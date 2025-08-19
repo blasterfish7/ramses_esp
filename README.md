@@ -3,7 +3,6 @@
 I forked the [RAMSES_ESP](https://github.com/IndaloTech/ramses_esp/) project of [IndaloTech](https://github.com/IndaloTech) such that I could make a version which would also work with the ESP32-C6 (or other single-core ESPs), and use it with [PlatformIO](https://platformio.org/) instead of Eclipse.
 
 Improvements that I made:
-  - MQTT uses a non-blocking function to publish (esp_mqtt_client_enqueue instead of esp_mqtt_client_publish)
   - In command, the console_readline had a bug that saved the '/n' character.
   - In command, the cmd_work had a bug that would continuously print the inserted command if it was not recognized.
   - The code can now be compiled for the IDF_TARGET_ESP32C6, most config files were changed to accomodate this.
@@ -15,3 +14,6 @@ Improvements that I made:
     - Changed CC_PKTLEN to 0x3D. The CC1101 suffers from a known bug that if in RX mode the FIFO is full, the chip hangs. I am not sure if the code ever suffered from this, but I changed it regardlessly.
   - It should now be possible to upload the software to both single and multi-core ESPs. (But I only tested this on the ESP32-C6, feel free to try this with other processors)
 
+## Support
+Buy me a coffee or purchase the board that I made for this in my (shop)[https://www.tindie.com/products/elecram/esp32-c6-wifizigbee-to-855-925mhz-wireless/].
+<a href="https://www.buymeacoffee.com/immrmkw" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
