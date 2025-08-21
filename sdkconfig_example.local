@@ -1,0 +1,15 @@
+# Local configuration overrides - Copy this file to sdkconfig.local and update with your settings
+# This file should NOT be committed to git
+
+# WiFi Configuration
+CONFIG_WIFI_SSID="YourWiFiSSID"
+CONFIG_WIFI_PASSWORD="YourWiFiPassword"
+
+# Optional: MQTT Broker Configuration (if different from defaults)
+# CONFIG_MQTT_BROKER_URL="mqtt://your-broker.local"
+# CONFIG_MQTT_BROKER_PORT=1883
+# CONFIG_MQTT_USERNAME="your-username" 
+# CONFIG_MQTT_PASSWORD="your-password"
+
+# Optional: Device ID override
+# CONFIG_DEVICE_ID="your-custom-device-id"
