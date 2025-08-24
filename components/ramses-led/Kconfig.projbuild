@@ -1,7 +1,8 @@
 menu "LED Configuration"
 	config GPIO_RX_LED
 		int "RX LED GPIO"
-		range 0 GPIO_RANGE_MAX
+		range 0 48 if IDF_TARGET_ESP32S3
+		range 0 23 if IDF_TARGET_ESP32C6
 		default 42 if IDF_TARGET_ESP32S3
 		default 19 if IDF_TARGET_ESP32C6
 		help
@@ -9,7 +10,8 @@ menu "LED Configuration"
 
 	config GPIO_TX_LED
 		int "TX LED GPIO"
-		range 0 GPIO_RANGE_MAX
+		range 0 48 if IDF_TARGET_ESP32S3
+		range 0 23 if IDF_TARGET_ESP32C6
 		default 41 if IDF_TARGET_ESP32S3
 		default 19 if IDF_TARGET_ESP32C6
 		help

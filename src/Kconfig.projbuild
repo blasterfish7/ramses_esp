@@ -1,23 +1,10 @@
 # put here your custom config value
 menu "RAMSES_ESP configuration"
 
-  config GPIO_RANGE_MAX
-    int "Maximum usable GPIO index"
-    default 48 if IDF_TARGET_ESP32S3
-    default 23 if IDF_TARGET_ESP32C6
-    help
-      Upper bound used in range clauses for per-board GPIO selections.
-
-  config CORES_MAX
-    int "Maximum core index"
-    default 1 if IDF_TARGET_ESP32S3
-    default 0 if IDF_TARGET_ESP32C6
-    help
-      Highest valid core number (0-based) for this target; used by RADIO_CORE.
-    
     config RADIO_CORE
       int "Core for Radio Task"
-      range 0 CORES_MAX
+      range 0 1 if IDF_TARGET_ESP32S3
+      range 0 0 if IDF_TARGET_ESP32C6
       default 1 if IDF_TARGET_ESP32S3
       default 0 if IDF_TARGET_ESP32C6
       help
@@ -33,7 +20,8 @@ menu "RAMSES_ESP configuration"
 
     config FUNCTION_PIN
       int "Function Button GPIO pin"
-      range 0 GPIO_RANGE_MAX
+      range 0 48 if IDF_TARGET_ESP32S3
+      range 0 23 if IDF_TARGET_ESP32C6
       default 0 if IDF_TARGET_ESP32S3
       default 9 if IDF_TARGET_ESP32C6
       help
