@@ -1,6 +1,6 @@
 # RAMSES ESP
 
-I forked the [RAMSES_ESP](https://github.com/IndaloTech/ramses_esp/) project of [IndaloTech](https://github.com/IndaloTech) such that I could make a version which would also work with the ESP32-C6 (or other single-core ESPs), and use it with [PlatformIO](https://platformio.org/) instead of Eclipse.
+I forked the [RAMSES_ESP](https://github.com/IndaloTech/ramses_esp/) project of [IndaloTech](https://github.com/IndaloTech) such that I could make a version which would also work with the ESP32-C6 (or other single-core ESPs), and use it with [PlatformIO](https://platformio.org/) instead of Eclipse. If you would like to use my board, instructions for using it are found [here](https://github.com/IMMRMKW/ramses_esp/wiki).
 
 Improvements that I made:
   - In command, the console_readline had a bug that saved the '/n' character.
@@ -15,5 +15,5 @@ Improvements that I made:
   - It should now be possible to upload the software to both single and multi-core ESPs. (But I only tested this on the ESP32-C6, feel free to try this with other processors)
 
 ## Support
-Buy me a coffee or purchase the board that I made for this in my (shop)[https://www.tindie.com/products/elecram/esp32-c6-wifizigbee-to-855-925mhz-wireless/].
+Buy me a coffee or purchase the board that I made for this in my [shop](https://www.tindie.com/products/elecram/esp32-c6-wifizigbee-to-855-925mhz-wireless/).
 <a href="https://www.buymeacoffee.com/immrmkw" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
