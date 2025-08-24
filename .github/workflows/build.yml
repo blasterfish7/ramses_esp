@@ -22,6 +22,19 @@ jobs:
         esp_idf_version: v5.1
         target: esp32c6
     
+    - name: Set ESP-IDF target
+      run: |
+        cd $GITHUB_WORKSPACE
+        idf.py set-target esp32c6
+    
+    - name: Configure project
+      run: |
+        cd $GITHUB_WORKSPACE
+        # Use the ESP32-C6 specific configuration
+        cp sdkconfig.esp32-c6-devkitm-1 sdkconfig
+        # Create empty local config to prevent errors
+        touch sdkconfig.local
+    
     - name: Build firmware
       run: |
         cd $GITHUB_WORKSPACE
@@ -30,10 +43,11 @@ jobs:
     - name: Create firmware package
       run: |
         mkdir -p release
-        cp build/ramses_esp.bin release/
+        cp build/ramses_esp.bin release/ || cp build/*.bin release/
         cp build/bootloader/bootloader.bin release/
         cp build/partition_table/partition-table.bin release/
-        cp build/flash_args release/
+        # Copy flash arguments if they exist
+        [ -f build/flash_args ] && cp build/flash_args release/ || echo "No flash_args found"
         
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
