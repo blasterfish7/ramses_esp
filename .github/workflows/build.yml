@@ -9,40 +9,42 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    
+
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
       with:
         submodules: recursive
-    
-    - name: Setup ESP-IDF
+
+    - name: Build (fresh sdkconfig from defaults)
       uses: espressif/esp-idf-ci-action@v1
       with:
         esp_idf_version: v5.4.1
         target: esp32c6
-    
-    - name: Configure & Build (fresh sdkconfig from defaults)
-      env:
-        SDKCONFIG_DEFAULTS: sdkconfig.defaults
-      run: |
-        cd $GITHUB_WORKSPACE
-        # Ensure no stale sdkconfig so Kconfig regenerates from defaults
-        rm -f sdkconfig
-        idf.py set-target esp32c6
-        # Force full reconfigure so defaults are merged
-        idf.py reconfigure
-        idf.py build
-    
+        path: .
+        # Run a clean reconfigure & build inside the action's container so idf.py is available
+        command: >-
+          bash -c "rm -f sdkconfig && export SDKCONFIG_DEFAULTS=sdkconfig.defaults && \
+          idf.py set-target esp32c6 && idf.py reconfigure && idf.py build"
+
     - name: Create firmware package
       run: |
+        set -e
         mkdir -p release
-        cp build/ramses_esp.bin release/ || cp build/*.bin release/
+        # Identify app binary (exclude bootloader / partition / ota data)
+        APP_BIN=$(ls build/*.bin | grep -v bootloader | grep -v partition | grep -v ota_data | head -n1)
+        cp "$APP_BIN" release/
         cp build/bootloader/bootloader.bin release/
         cp build/partition_table/partition-table.bin release/
-        # Copy flash arguments if they exist
-        [ -f build/flash_args ] && cp build/flash_args release/ || echo "No flash_args found"
-        
+        [ -f build/ota_data_initial.bin ] && cp build/ota_data_initial.bin release/ || echo "No ota_data_initial.bin"
+        if [ -f build/flash_args ]; then
+          cp build/flash_args release/
+          # Generate a concise manifest with flash command
+          echo "Flash command (Linux/macOS):" > release/FLASH_MANIFEST.txt
+          echo "python -m esptool --chip esp32c6 $(tr '\n' ' ' < build/flash_args)" >> release/FLASH_MANIFEST.txt
+        fi
+        echo "Generated files:" && ls -1 release
+
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
