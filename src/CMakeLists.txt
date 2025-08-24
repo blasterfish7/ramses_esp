@@ -13,11 +13,12 @@
 # This file was automatically generated for projects
 # without default 'CMakeLists.txt' file.
 
-FILE(GLOB_RECURSE app_sources ${CMAKE_SOURCE_DIR}/src/*.*)
+FILE(GLOB app_sources CONFIGURE_DEPENDS ${CMAKE_CURRENT_LIST_DIR}/*.c)
 
 idf_component_register(
     SRCS ${app_sources}
     REQUIRES driver esp_app_format esp_event console esp_timer
-    )
+    PRIV_REQUIRES command ramses-debug ramses-buttons ramses-led ramses-nvs ramses-network ramses-mqtt cc1101 frame message gateway
+)
 
 
