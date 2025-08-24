@@ -6,6 +6,9 @@ on:
       - 'v*'
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -49,6 +52,25 @@ jobs:
         # Produce checksum for integrity verification (optional)
         (sha256sum release/ramses_esp_esp32_c6.bin || shasum -a 256 release/ramses_esp_esp32_c6.bin) > release/ramses_esp_esp32_c6.bin.sha256 || true
         ls -lh release/ramses_esp_esp32_c6.bin
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: |
+          release/ramses_esp_esp32_c6.bin
+          release/ramses_esp_esp32_c6.bin.sha256
+        generate_release_notes: true
+        draft: false
+        prerelease: false
+        body: |
+          Auto-generated release for ${{ github.ref_name }}.
+          Single merged firmware image: ramses_esp_esp32_c6.bin
+          Flash example (Linux/macOS):
+            python -m esptool --chip esp32c6 write_flash 0x0 ramses_esp_esp32_c6.bin
+          Flash example (Windows PowerShell):
+            py -m esptool --chip esp32c6 write_flash 0x0 .\ramses_esp_esp32_c6.bin
+          Setup instructions: see project wiki.
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
