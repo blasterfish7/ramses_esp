@@ -1,0 +1,42 @@
+name: Build ESP32 Firmware
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        submodules: recursive
+    
+    - name: Setup ESP-IDF
+      uses: espressif/esp-idf-ci-action@v1
+      with:
+        esp_idf_version: v5.1
+        target: esp32c6
+    
+    - name: Build firmware
+      run: |
+        cd $GITHUB_WORKSPACE
+        idf.py build
+    
+    - name: Create firmware package
+      run: |
+        mkdir -p release
+        cp build/ramses_esp.bin release/
+        cp build/bootloader/bootloader.bin release/
+        cp build/partition_table/partition-table.bin release/
+        cp build/flash_args release/
+        
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: esp32c6-firmware
+        path: release/
