@@ -52,16 +52,19 @@ jobs:
         fi
         pip install --no-cache-dir esptool
         mkdir -p release
-        # Create single full flash image
-        python -m esptool --chip esp32c6 merge_bin -o release/full_flash.bin $(tr '\n' ' ' < build/flash_args)
+        # Run merge inside build dir so relative paths in flash_args resolve
+        (
+          cd build
+          python -m esptool --chip esp32c6 merge-bin -o ../release/full_flash.bin $(tr '\n' ' ' < flash_args)
+        )
         # Produce checksum for integrity verification
         (sha256sum release/full_flash.bin || shasum -a 256 release/full_flash.bin) > release/full_flash.bin.sha256 || true
         # Append instructions to manifest if it exists
         if [ -f release/FLASH_MANIFEST.txt ]; then
           {
             echo ""; echo "Single-image flash (overwrites whole flash region set used here):"; \
-            echo "python -m esptool --chip esp32c6 write_flash @<(echo 0x0 release/full_flash.bin)"; \
-            echo "(or with esptool 4+: esptool.py --chip esp32c6 write_flash 0x0 full_flash.bin)"; \
+            echo "python -m esptool --chip esp32c6 write_flash 0x0 full_flash.bin"; \
+            echo "PowerShell (Windows): esptool.py --chip esp32c6 write_flash 0x0 .\\full_flash.bin"; \
           } >> release/FLASH_MANIFEST.txt
         fi
         ls -lh release/full_flash.bin
