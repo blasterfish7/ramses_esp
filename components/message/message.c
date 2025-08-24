@@ -22,6 +22,8 @@ static const char* TAG = "MSG";
 #include "esp_log.h"
 
 #include "frame.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/portmacro.h"
 #include "gateway.h"
 #include "message.h"
 
