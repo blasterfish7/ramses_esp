@@ -29,21 +29,10 @@ jobs:
       run: |
         set -e
         mkdir -p release
-        # Identify app binary (exclude bootloader / partition / ota data)
-        APP_BIN=$(ls build/*.bin | grep -v bootloader | grep -v partition | grep -v ota_data | head -n1)
-        cp "$APP_BIN" release/
-        cp build/bootloader/bootloader.bin release/
-        cp build/partition_table/partition-table.bin release/
-        [ -f build/ota_data_initial.bin ] && cp build/ota_data_initial.bin release/ || echo "No ota_data_initial.bin"
-        if [ -f build/flash_args ]; then
-          cp build/flash_args release/
-          # Generate a concise manifest with flash command
-          echo "Flash command (Linux/macOS):" > release/FLASH_MANIFEST.txt
-          echo "python -m esptool --chip esp32c6 $(tr '\n' ' ' < build/flash_args)" >> release/FLASH_MANIFEST.txt
-        fi
-        echo "Generated files:" && ls -1 release
+        # We only want a single merged binary output; keep flash_args for merge step
+        cp build/flash_args release/ 2>/dev/null || true
 
-    - name: Merge full flash image
+    - name: Build single flash image
       run: |
         set -e
         if [ ! -f build/flash_args ]; then
@@ -55,22 +44,14 @@ jobs:
         # Run merge inside build dir so relative paths in flash_args resolve
         (
           cd build
-          python -m esptool --chip esp32c6 merge-bin -o ../release/full_flash.bin $(tr '\n' ' ' < flash_args)
+          python -m esptool --chip esp32c6 merge-bin -o ../release/ramses_esp_esp32_c6.bin $(tr '\n' ' ' < flash_args)
         )
-        # Produce checksum for integrity verification
-        (sha256sum release/full_flash.bin || shasum -a 256 release/full_flash.bin) > release/full_flash.bin.sha256 || true
-        # Append instructions to manifest if it exists
-        if [ -f release/FLASH_MANIFEST.txt ]; then
-          {
-            echo ""; echo "Single-image flash (overwrites whole flash region set used here):"; \
-            echo "python -m esptool --chip esp32c6 write_flash 0x0 full_flash.bin"; \
-            echo "PowerShell (Windows): esptool.py --chip esp32c6 write_flash 0x0 .\\full_flash.bin"; \
-          } >> release/FLASH_MANIFEST.txt
-        fi
-        ls -lh release/full_flash.bin
+        # Produce checksum for integrity verification (optional)
+        (sha256sum release/ramses_esp_esp32_c6.bin || shasum -a 256 release/ramses_esp_esp32_c6.bin) > release/ramses_esp_esp32_c6.bin.sha256 || true
+        ls -lh release/ramses_esp_esp32_c6.bin
 
     - name: Upload artifacts
       uses: actions/upload-artifact@v4
       with:
-        name: esp32c6-firmware
+        name: esp32c6-firmware-single
         path: release/
