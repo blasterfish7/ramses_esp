@@ -1,0 +1,56 @@
+# RAMSES custom configuration (moved from src/ so IDF picks it up)
+menu "RAMSES_ESP configuration"
+
+  config GPIO_RANGE_MAX
+    int "Maximum usable GPIO index"
+    default 48 if IDF_TARGET_ESP32S3
+    default 23 if IDF_TARGET_ESP32C6
+    help
+      Upper bound used in range clauses for per-board GPIO selections.
+
+  config CORES_MAX
+    int "Maximum core index"
+    default 1 if IDF_TARGET_ESP32S3
+    default 0 if IDF_TARGET_ESP32C6
+    help
+      Highest valid core number (0-based) for this target.
+
+  config RADIO_CORE
+    int "Core for Radio Task"
+    range 0 CORES_MAX
+    default 1 if IDF_TARGET_ESP32S3
+    default 0 if IDF_TARGET_ESP32C6
+    help
+      The Radio task will run on this core.
+
+  config HOST_CORE
+    int "Core for Host Task"
+    range 0 CORES_MAX
+    default 0
+    help
+      The Host task will run on this core.
+
+  config FUNCTION_PIN
+    int "Function Button GPIO pin"
+    range 0 GPIO_RANGE_MAX
+    default 0 if IDF_TARGET_ESP32S3
+    default 9 if IDF_TARGET_ESP32C6
+    help
+      GPIO pin number of Function Button.
+
+  config CS_PLATFORM_PIN
+    int "CS Pin"
+    range 0 GPIO_RANGE_MAX
+    default 12 if IDF_TARGET_ESP32S3
+    default 23 if IDF_TARGET_ESP32C6
+    help
+      GPIOx for CS Platform (used by platform selection circuitry).
+
+  config RESTART_DELAY
+    int "Restart Delay (seconds)"
+    range 10 30
+    default 15
+    help
+      Function button hold duration before restart.
+
+endmenu
