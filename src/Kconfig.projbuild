@@ -1,53 +1,57 @@
 # put here your custom config value
 menu "RAMSES_ESP configuration"
 
-	config GPIO_RANGE_MAX
-		int
-		default 48 if IDF_TARGET_ESP32S3
-        default 23 if IDF_TARGET_ESP32C6
+  config GPIO_RANGE_MAX
+    int "Maximum usable GPIO index"
+    default 48 if IDF_TARGET_ESP32S3
+    default 23 if IDF_TARGET_ESP32C6
+    help
+      Upper bound used in range clauses for per-board GPIO selections.
 
-    config CORES_MAX
-		int
-		default 1 if IDF_TARGET_ESP32S3
-        default 0 if IDF_TARGET_ESP32C6
+  config CORES_MAX
+    int "Maximum core index"
+    default 1 if IDF_TARGET_ESP32S3
+    default 0 if IDF_TARGET_ESP32C6
+    help
+      Highest valid core number (0-based) for this target; used by RADIO_CORE.
     
     config RADIO_CORE
-    int "Core for Radio Task"
-        range 0 CORES_MAX
-        default 1 if IDF_TARGET_ESP32S3
-        default 0 if IDF_TARGET_ESP32C6
-        help
-            The Radio task will run on this core.
+      int "Core for Radio Task"
+      range 0 CORES_MAX
+      default 1 if IDF_TARGET_ESP32S3
+      default 0 if IDF_TARGET_ESP32C6
+      help
+        The Radio task will run on this core.
 
     config HOST_CORE
-    int "Core for Host Task"
-        range 0 1
-        default 0 if IDF_TARGET_ESP32S3
-        default 0 if IDF_TARGET_ESP32C6
-        help
-            The Host task will run on this core.
+      int "Core for Host Task"
+      range 0 1
+      default 0 if IDF_TARGET_ESP32S3
+      default 0 if IDF_TARGET_ESP32C6
+      help
+        The Host task will run on this core.
 
     config FUNCTION_PIN
-    int "Function Button GPIO pin"
+      int "Function Button GPIO pin"
       range 0 GPIO_RANGE_MAX
       default 0 if IDF_TARGET_ESP32S3
       default 9 if IDF_TARGET_ESP32C6
       help
-          GPIO pin number of Function Button          
+        GPIO pin number of Function Button
 
     config CS_PLATFORM_PIN
-    int "CS Pin"
+      int "CS Pin"
       range 0 41
       default 12 if IDF_TARGET_ESP32S3
       default 23 if IDF_TARGET_ESP32C6
-        help
-        	GPIOx for CS Platform
+      help
+        GPIOx for CS Platform
 
     config RESTART_DELAY
-    int "Restart Delay"
+      int "Restart Delay (seconds)"
       range 10 30
       default 15
-        help
-        	FUNC button hold fore restart (Sec)
+      help
+        Function button hold for restart duration.
 
 endmenu
