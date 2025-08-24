@@ -22,22 +22,16 @@ jobs:
         esp_idf_version: v5.1
         target: esp32c6
     
-    - name: Set ESP-IDF target
+    - name: Configure & Build (fresh sdkconfig from defaults)
+      env:
+        SDKCONFIG_DEFAULTS: sdkconfig.defaults
       run: |
         cd $GITHUB_WORKSPACE
+        # Ensure no stale sdkconfig so Kconfig regenerates from defaults
+        rm -f sdkconfig
         idf.py set-target esp32c6
-    
-    - name: Configure project
-      run: |
-        cd $GITHUB_WORKSPACE
-        # Use the ESP32-C6 specific configuration
-        cp sdkconfig.esp32-c6-devkitm-1 sdkconfig
-        # Create empty local config to prevent errors
-        touch sdkconfig.local
-    
-    - name: Build firmware
-      run: |
-        cd $GITHUB_WORKSPACE
+        # Force full reconfigure so defaults are merged
+        idf.py reconfigure
         idf.py build
     
     - name: Create firmware package
