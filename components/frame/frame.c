@@ -446,8 +446,6 @@ static void tx_fifo_prime(void)
 
     txBits = 0;
     uint8_t done = 0;
-    uint8_t count = 0;
-    uint8_t data;
     // if level change is missed or otherwise while-loop fails, timeout.
     uint64_t now = esp_timer_get_time();
     uint64_t time_out = 200 * 1000; // 200ms
@@ -462,11 +460,9 @@ static void tx_fifo_prime(void)
     tx_flush();
     cc_fifo_end();
     if (done) {
-        uint64_t now = esp_timer_get_time();
-        // Wait for CC1101 to signal FIFO low
-
-        while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && (esp_timer_get_time() - now) < time_out) {
-        }
+    uint64_t start2 = esp_timer_get_time();
+    while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && (esp_timer_get_time() - start2) < time_out) {
+    }
         tx_fifo_wait();
     } else {
         // Failed sending... Reset everything
