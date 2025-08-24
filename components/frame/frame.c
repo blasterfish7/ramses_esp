@@ -391,18 +391,18 @@ static void tx_flush(void)
 //-----------------------------------------------------------------
 // TX FIFO
 
-static QueueHandle_t tx_isr_queue;
+// static QueueHandle_t tx_isr_queue;
 
 static enum tx_fifo_state {
     TX_FIFO_FILL,
     TX_FIFO_WAIT
 } tx_state;
 
-static void tx_fifo_stop(void)
-{
-    gpio_isr_handler_remove(CONFIG_CC_GDO0_GPIO);
-    xQueueReset(tx_isr_queue);
-}
+// static void tx_fifo_stop(void)
+// {
+//     gpio_isr_handler_remove(CONFIG_CC_GDO0_GPIO);
+//     xQueueReset(tx_isr_queue);
+// }
 
 static void tx_fifo_wait(void)
 {
@@ -460,9 +460,11 @@ static void tx_fifo_prime(void)
     tx_flush();
     cc_fifo_end();
     if (done) {
-    uint64_t start2 = esp_timer_get_time();
-    while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && (esp_timer_get_time() - start2) < time_out) {
-    }
+        uint64_t now = esp_timer_get_time();
+        // Wait for CC1101 to signal FIFO low
+
+        while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && (esp_timer_get_time() - now) < time_out) {
+        }
         tx_fifo_wait();
     } else {
         // Failed sending... Reset everything
@@ -494,11 +496,11 @@ static void tx_fifo_fill(void)
 
 //---------------------------------------------------------------------------------
 
-static void IRAM_ATTR GDO0_ISR(void* args)
-{
-    gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
-    xQueueSendFromISR(tx_isr_queue, NULL, NULL);
-}
+// static void IRAM_ATTR GDO0_ISR(void* args)
+// {
+//     gpio_intr_disable(CONFIG_CC_GDO0_GPIO);
+//     xQueueSendFromISR(tx_isr_queue, NULL, NULL);
+// }
 
 static void tx_fifo_init(void)
 {
@@ -507,8 +509,8 @@ static void tx_fifo_init(void)
     gpio_pulldown_en(CONFIG_CC_GDO0_GPIO);
     gpio_pullup_dis(CONFIG_CC_GDO0_GPIO);
 
-    tx_isr_queue = xQueueCreate(32, 0);
-    gpio_install_isr_service(0);
+    // tx_isr_queue = xQueueCreate(32, 0);
+    // gpio_install_isr_service(0);
 }
 
 static void tx_fifo_start(void)
@@ -521,24 +523,24 @@ static void tx_fifo_start(void)
     // gpio_isr_handler_add(CONFIG_CC_GDO0_GPIO, GDO0_ISR, NULL);
 }
 
-static void tx_fifo_work(void)
-{
-    if (xQueueReceive(tx_isr_queue, NULL, 0)) {
-        DEBUG_FRAME(0);
-        led_off(LED_TX);
-        switch (tx_state) {
-        case TX_FIFO_FILL:
-            tx_fifo_fill();
-            break;
-        case TX_FIFO_WAIT:
-            tx_fifo_wait();
-            break;
-        }
-        gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
-        DEBUG_FRAME(1);
-        led_on(LED_TX);
-    }
-}
+// static void tx_fifo_work(void)
+// {
+//     if (xQueueReceive(tx_isr_queue, NULL, 0)) {
+//         DEBUG_FRAME(0);
+//         led_off(LED_TX);
+//         switch (tx_state) {
+//         case TX_FIFO_FILL:
+//             tx_fifo_fill();
+//             break;
+//         case TX_FIFO_WAIT:
+//             tx_fifo_wait();
+//             break;
+//         }
+//         gpio_intr_enable(CONFIG_CC_GDO0_GPIO);
+//         DEBUG_FRAME(1);
+//         led_on(LED_TX);
+//     }
+// }
 
 /***********************************************************************************
 ** TX FRAME processing
