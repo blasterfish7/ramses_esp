@@ -476,23 +476,23 @@ static void tx_fifo_prime(void)
     // Re-enable interrupts (exit critical section)
 }
 
-static void tx_fifo_fill(void)
-{
-    uint8_t done = 0;
+// static void tx_fifo_fill(void)
+// {
+//     uint8_t done = 0;
 
-    while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && !done)
-        done = tx_fifo_send_block();
+//     while (!gpio_get_level(CONFIG_CC_GDO0_GPIO) && !done)
+//         done = tx_fifo_send_block();
 
-    if (done) {
-        tx_flush();
-        cc_fifo_end();
+//     if (done) {
+//         tx_flush();
+//         cc_fifo_end();
 
-        tx_state = TX_FIFO_WAIT;
+//         tx_state = TX_FIFO_WAIT;
 
-        // Switch to rising edge to detect FIFO empty
-        gpio_set_intr_type(CONFIG_CC_GDO0_GPIO, GPIO_INTR_POSEDGE);
-    }
-}
+//         // Switch to rising edge to detect FIFO empty
+//         gpio_set_intr_type(CONFIG_CC_GDO0_GPIO, GPIO_INTR_POSEDGE);
+//     }
+// }
 
 //---------------------------------------------------------------------------------
 
