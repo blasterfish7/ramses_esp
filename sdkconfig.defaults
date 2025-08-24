@@ -87,8 +87,8 @@ CONFIG_WIFI_MAXIMUM_RETRY=5
 # Gateway Configuration
 CONFIG_GWAY_LOG_LEVEL=2
 
-# Frame Configuration  
-CONFIG_FRAME_LOG_LEVEL=0
+# Frame Configuration
+CONFIG_FRM_LOG_LEVEL=0
 
 # Message Configuration
 CONFIG_N_MSG=16
