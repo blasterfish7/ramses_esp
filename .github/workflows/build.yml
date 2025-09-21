@@ -1,0 +1,60 @@
+name: build-d1-mini
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PlatformIO
+        run: pipx install platformio
+      - name: Write platformio.ini
+        run: |
+          cat > platformio.ini << 'EOF'
+          [platformio]
+          default_envs = d1_mini
+
+          [env:d1_mini]
+          platform = espressif8266
+          board = d1_mini
+          framework = arduino
+          upload_speed = 921600
+          monitor_speed = 115200
+          EOF
+      - name: Write config.yaml
+        run: |
+          cat > config.yaml << 'EOF'
+          wifi:
+            ssid: "pessetti"
+            password: "@P3ss3tt12310#"
+          mqtt:
+            host: 192.168.178.39
+            port: 1883
+            username: "mqtt"
+            password: "musato"
+            base_topic: ramses_esp
+          serial:
+            log_level: INFO
+          radio:
+            spi_bus:
+              miso: 12
+              mosi: 13
+              clk: 14
+              cs: 15
+              gdo0: 4
+            frequency: 868.3
+            bitrate: 38k
+          decoders:
+            ramses:
+              enabled: true
+          EOF
+      - name: Build
+        run: pio run -e d1_mini
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-d1-mini
+          path: .pio/build/d1_mini/firmware.bin
